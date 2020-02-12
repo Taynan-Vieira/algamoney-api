@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS public.categoria(
-    codigo SERIAL NOT null ,
-    nome VARCHAR(50),
+    codigo SERIAL NOT NULL ,
+    nome VARCHAR(50) NOT NULL,
     CONSTRAINT pktcc_codigo PRIMARY KEY (codigo)
 
 );
