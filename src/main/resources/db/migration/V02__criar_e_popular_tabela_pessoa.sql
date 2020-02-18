@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS public.pessoa
+CREATE TABLE IF NOT EXISTS PUBLIC.pessoa
 (
     codigo      SERIAL      NOT NULL,
     nome        VARCHAR(50) NOT NULL,

@@ -36,4 +36,6 @@ public class Endereco {
 	@Setter
 	private String estado;
 
+
+
 }

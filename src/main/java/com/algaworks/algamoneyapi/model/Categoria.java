@@ -15,12 +15,14 @@ public class Categoria {
 	@Getter
 	@Setter
 	@Id
+	@Column(name = "codigo")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
 
 	@Getter
 	@Setter
 	@NotNull
+	@Column(name = "nome")
 	@Size(min = 3, max = 20)
 	private String nome;
 

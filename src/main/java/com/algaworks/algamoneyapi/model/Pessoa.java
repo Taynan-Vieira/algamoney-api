@@ -15,6 +15,7 @@ public class Pessoa {
 	@Id
 	@Getter
 	@Setter
+	@Column(name = "codigo")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
 
@@ -22,6 +23,7 @@ public class Pessoa {
 	@Size(min = 3, max= 50)
 	@Getter
 	@Setter
+	@Column(name = "nome")
 	private String nome;
 
 	@Embedded
@@ -32,6 +34,7 @@ public class Pessoa {
 	@Getter
 	@Setter
 	@NotNull
+	@Column(name = "ativo")
 	private Boolean ativo;
 
 	@Override
@@ -41,12 +44,11 @@ public class Pessoa {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		Pessoa pessoa = (Pessoa) o;
-		return Objects.equals(codigo, pessoa.codigo) && Objects.equals(nome, pessoa.nome) &&
-				Objects.equals(endereco, pessoa.endereco) && Objects.equals(ativo, pessoa.ativo);
+		return Objects.equals(codigo, pessoa.codigo) && Objects.equals(nome, pessoa.nome);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(codigo, nome, endereco, ativo);
+		return Objects.hash(codigo, nome);
 	}
 }
