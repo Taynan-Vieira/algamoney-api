@@ -1,5 +1,6 @@
 package com.algaworks.algamoneyapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,6 +37,12 @@ public class Pessoa {
 	@NotNull
 	@Column(name = "ativo")
 	private Boolean ativo;
+
+	@JsonIgnore
+	@Transient
+	public boolean isInativo(){
+		return !this.ativo;
+	}
 
 	@Override
 	public boolean equals(Object o) {
