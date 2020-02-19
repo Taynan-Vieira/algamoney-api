@@ -24,14 +24,25 @@ public class LancamentoResource {
 	private LancamentoRepository lancamentoRepository;
 
 	@GetMapping
-	public List<Lancamento> listarLancamentos(){
+	public List<Lancamento> listarLancamentos() {
 		return lancamentoRepository.findAll();
 	}
 
 	@GetMapping("/{codigo}")
-	public ResponseEntity<?> buscarPorCodigo(@PathVariable Long codigo){
+	public ResponseEntity<?> buscarPorCodigo(@PathVariable Long codigo) {
 		Lancamento lancamento = lancamentoRepository.findOne(codigo);
 		return lancamento != null ? ResponseEntity.ok(lancamento) : ResponseEntity.notFound().build();
+	}
+
+	@PostMapping
+	public ResponseEntity<Lancamento> criarLancamento(@Valid @RequestBody Lancamento lancamento,
+	                                                  HttpServletResponse response) {
+		Lancamento lancamentoSalvo = lancamentoRepository.save(lancamento);
+
+		publisher.publishEvent(new RecursoCriadoEvent(this, response, lancamentoSalvo.getCodigo()));
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(lancamentoSalvo);
+
 	}
 
 }
