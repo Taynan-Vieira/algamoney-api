@@ -4,6 +4,7 @@ import com.algaworks.algamoneyapi.event.RecursoCriadoEvent;
 import com.algaworks.algamoneyapi.exceptionhandler.AlgamoneyExceptionHandler;
 import com.algaworks.algamoneyapi.model.Lancamento;
 import com.algaworks.algamoneyapi.repository.LancamentoRepository;
+import com.algaworks.algamoneyapi.repository.filter.LancamentoFilter;
 import com.algaworks.algamoneyapi.service.LancamentoService;
 import com.algaworks.algamoneyapi.service.exception.PessoaInexistenteOuInativaException;
 import edu.emory.mathcs.backport.java.util.Arrays;
@@ -37,8 +38,8 @@ public class LancamentoResource {
 	private MessageSource messageSource;
 
 	@GetMapping
-	public List<Lancamento> listarLancamentos() {
-		return lancamentoRepository.findAll();
+	public List<Lancamento> pesquisar(LancamentoFilter lancamentoFilter) {
+		return lancamentoRepository.filtrar(lancamentoFilter);
 	}
 
 	@GetMapping("/{codigo}")
@@ -56,6 +57,12 @@ public class LancamentoResource {
 
 	}
 
+	@DeleteMapping("/{codigo}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void removerLancamento(@PathVariable Long codigo){
+		lancamentoRepository.delete(codigo);
+	}
+
 	@ExceptionHandler({PessoaInexistenteOuInativaException.class})
 	public ResponseEntity<Object> handlePessoaInexistenteOuInativaException(PessoaInexistenteOuInativaException ex){
 		String mensagemUsuario = messageSource.getMessage("pessoa.inexistente-ou-inativa", null,
@@ -68,10 +75,5 @@ public class LancamentoResource {
 		return ResponseEntity.badRequest().body(erros);
 	}
 
-	@DeleteMapping("/{codigo}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void removerLancamento(@PathVariable Long codigo){
-		lancamentoRepository.delete(codigo);
-	}
 
 }
