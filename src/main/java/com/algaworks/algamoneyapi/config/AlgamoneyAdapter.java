@@ -1,4 +1,4 @@
-package com.algaworks.algamoneyapi.adapter;
+package com.algaworks.algamoneyapi.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.PageRequest;
