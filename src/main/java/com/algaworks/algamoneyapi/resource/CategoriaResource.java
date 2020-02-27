@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/categorias")
@@ -29,9 +30,10 @@ public class CategoriaResource {
 	}
 
 	@GetMapping("/{codigo}")
-	public ResponseEntity<?> buscarPorCodigo(@PathVariable Long codigo) {
-		Categoria categoria = categoriaRepository.findOne(codigo);
-		return categoria != null ? ResponseEntity.ok(categoria) : ResponseEntity.notFound().build();
+	public ResponseEntity buscarPeloCodigo(@PathVariable Long codigo) {
+		Optional categoria = this.categoriaRepository.findById(codigo);
+		return categoria.isPresent() ?
+				ResponseEntity.ok(categoria.get()) : ResponseEntity.notFound().build();
 	}
 
 	@PostMapping

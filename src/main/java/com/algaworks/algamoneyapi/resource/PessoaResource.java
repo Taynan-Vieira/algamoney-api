@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/pessoas")
@@ -33,9 +34,9 @@ public class PessoaResource {
 	}
 
 	@GetMapping("/{codigo}")
-	public ResponseEntity<?> buscarPorCodigo(@PathVariable Long codigo) {
-		Pessoa pessoa = pessoaRepository.findOne(codigo);
-		return pessoa != null ? ResponseEntity.ok(pessoa) : ResponseEntity.notFound().build();
+	public ResponseEntity buscarPorCodigo(@PathVariable Long codigo) {
+		Optional pessoa = pessoaRepository.findById(codigo);
+		return pessoa.isPresent() ? ResponseEntity.ok(pessoa.get()) : ResponseEntity.notFound().build();
 	}
 
 	@PostMapping
@@ -51,7 +52,7 @@ public class PessoaResource {
 	@DeleteMapping("/{codigo}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void removerPessoa(@PathVariable Long codigo) {
-		pessoaRepository.delete(codigo);
+		pessoaRepository.deleteById(codigo);
 	}
 
 	@PutMapping("/{codigo}")

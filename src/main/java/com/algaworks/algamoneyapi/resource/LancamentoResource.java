@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/lancamentos")
@@ -43,9 +44,10 @@ public class LancamentoResource {
 	}
 
 	@GetMapping("/{codigo}")
-	public ResponseEntity<?> buscarPorCodigo(@PathVariable Long codigo) {
-		Lancamento lancamento = lancamentoRepository.findOne(codigo);
-		return lancamento != null ? ResponseEntity.ok(lancamento) : ResponseEntity.notFound().build();
+	public ResponseEntity buscarPorCodigo(@PathVariable Long codigo) {
+		Optional lancamento = this.lancamentoRepository.findById(codigo);
+		return lancamento.isPresent() ?
+				ResponseEntity.ok(lancamento.get()) : ResponseEntity.notFound().build();
 	}
 
 	@PostMapping
@@ -60,7 +62,7 @@ public class LancamentoResource {
 	@DeleteMapping("/{codigo}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void removerLancamento(@PathVariable Long codigo){
-		lancamentoRepository.delete(codigo);
+		lancamentoRepository.delete(lancamento);
 	}
 
 	@ExceptionHandler({PessoaInexistenteOuInativaException.class})
