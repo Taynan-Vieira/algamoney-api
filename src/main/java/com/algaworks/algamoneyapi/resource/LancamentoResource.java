@@ -4,11 +4,9 @@ import com.algaworks.algamoneyapi.event.RecursoCriadoEvent;
 import com.algaworks.algamoneyapi.exceptionhandler.AlgamoneyExceptionHandler;
 import com.algaworks.algamoneyapi.model.Lancamento;
 import com.algaworks.algamoneyapi.repository.LancamentoRepository;
-import com.algaworks.algamoneyapi.repository.filter.LancamentoFilter;
 import com.algaworks.algamoneyapi.service.LancamentoService;
 import com.algaworks.algamoneyapi.service.exception.PessoaInexistenteOuInativaException;
 import edu.emory.mathcs.backport.java.util.Arrays;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
@@ -38,8 +36,8 @@ public class LancamentoResource {
 	private MessageSource messageSource;
 
 	@GetMapping
-	public List<Lancamento> pesquisar(LancamentoFilter lancamentoFilter) {
-		return lancamentoRepository.filtrar(lancamentoFilter);
+	public List<Lancamento> listarLancamentos(){
+		return lancamentoRepository.findAll();
 	}
 
 	@GetMapping("/{codigo}")
