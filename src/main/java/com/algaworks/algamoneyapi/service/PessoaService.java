@@ -4,6 +4,7 @@ import com.algaworks.algamoneyapi.model.Pessoa;
 import com.algaworks.algamoneyapi.repository.PessoaRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -17,18 +18,20 @@ public class PessoaService {
 
 	public Pessoa atualizar(Long codigo, Pessoa pessoa) {
 
-		Optional pessoaSalva = this.pessoaRepository.findById(codigo);
+		Pessoa pessoaSalva = this.pessoaRepository.findById(codigo)
+				.orElseThrow(() -> new EmptyResultDataAccessException(1));
+
 		BeanUtils.copyProperties(pessoa, pessoaSalva, "codigo");
 		return this.pessoaRepository.save(pessoaSalva);
 	}
 
-	public void atualizarPropriedadeAtivo(Long codigo, Boolean ativo) {
-		ResponseEntity<Pessoa> pessoaSalva = buscarPessoaPeloCodigo(codigo);
-		pessoaSalva.setAtivo(ativo);
-		pessoaRepository.save(pessoaSalva);
+	public Pessoa atualizarPropriedadeAtivo(Long codigo, Boolean ativo) {
+		Optional<Pessoa> pessoaSalva = pessoaRepository.findById(codigo)
+				.orElseThrow(() -> new EmptyResultDataAccessException(1));
+		return pessoaRepository.save(pessoaSalva);
 	}
 
-	public ResponseEntity buscarPessoaPeloCodigo(Long codigo) {
+	public ResponseEntity<Pessoa> buscarPessoaPeloCodigo(Long codigo) {
 		Optional pessoaSalva = pessoaRepository.findById(codigo);
 		return pessoaSalva.isPresent() ? ResponseEntity.ok(pessoaSalva.get()) : ResponseEntity.notFound();
 	}
