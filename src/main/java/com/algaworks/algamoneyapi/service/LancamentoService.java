@@ -8,6 +8,8 @@ import com.algaworks.algamoneyapi.service.exception.PessoaInexistenteOuInativaEx
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class LancamentoService {
 
@@ -18,14 +20,15 @@ public class LancamentoService {
 	private LancamentoRepository lancamentoRepository;
 
 	public Lancamento salvar(Lancamento lancamento) {
-		Pessoa pessoa = pessoaRepository.findOne(lancamento.getPessoa().getCodigo());
-		if(pessoa == null || pessoa.isInativo()){
+
+		Optional<Pessoa> pessoa = pessoaRepository.findById(lancamento.getPessoa().getCodigo());
+
+		if (!pessoa.isPresent()) {
 			throw new PessoaInexistenteOuInativaException();
 		}
 
 		return lancamentoRepository.save(lancamento);
 
 	}
-
 
 }

@@ -26,9 +26,11 @@ public class PessoaService {
 	}
 
 	public Pessoa atualizarPropriedadeAtivo(Long codigo, Boolean ativo) {
-		Optional<Pessoa> pessoaSalva = pessoaRepository.findById(codigo)
+		Optional<Pessoa> pessoaSalva = Optional.ofNullable(pessoaRepository.findById(codigo))
 				.orElseThrow(() -> new EmptyResultDataAccessException(1));
-		return pessoaRepository.save(pessoaSalva);
+		Pessoa pessoa = pessoaSalva.get();
+		pessoa.setAtivo(ativo);
+		return pessoaRepository.save(pessoa);
 	}
 
 	public ResponseEntity<Pessoa> buscarPessoaPeloCodigo(Long codigo) {
