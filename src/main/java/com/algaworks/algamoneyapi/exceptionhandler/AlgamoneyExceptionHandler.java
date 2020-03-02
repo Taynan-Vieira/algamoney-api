@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @ControllerAdvice
 public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler {
@@ -50,6 +51,17 @@ public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler({EmptyResultDataAccessException.class})
 	public ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex,
+	                                                                   WebRequest request){
+		String mensagemUsuario = messageSource.getMessage("recurso.nao-encontrado", null,
+		                                                  LocaleContextHolder.getLocale());
+		String mensagemDesenvolvedor = ex.toString();
+		List erros = Arrays.asList(new Erro[]{new Erro(mensagemUsuario, mensagemDesenvolvedor)});
+
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+	}
+
+	@ExceptionHandler({NoSuchElementException.class})
+	public ResponseEntity<Object> handleEmptyResultDataAccessException(NoSuchElementException ex,
 	                                                                   WebRequest request){
 		String mensagemUsuario = messageSource.getMessage("recurso.nao-encontrado", null,
 		                                                  LocaleContextHolder.getLocale());
