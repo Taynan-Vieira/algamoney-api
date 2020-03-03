@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.IOException;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -25,17 +26,19 @@ public class RefreshTokenCookiesPreProcessorFilter implements Filter {
 		if ("/oauth/token".equalsIgnoreCase(request.getRequestURI())
 				&& "refresh_token".equals(request.getParameter("grant_type"))
 				& request.getCookies() != null) {
-			for (Cookie cookie : request.getCookies()) {
-				if (cookie.getName().equals("refreshToken")) {
-					String refreshToken = cookie.getValue();
-					request = new MyServletRequestWrapper(request, refreshToken);
-				}
+
+			String refreshToken = Stream.of(request.getCookies())
+					.filter(cookie -> "refreshToken".equals(cookie.getName()))
+					.findFirst()
+					.map(cookie -> cookie.getValue())
+					.orElse(null);
+
+			request = new MyServletRequestWrapper(request, refreshToken);
 			}
-		}
 
 		filterChain.doFilter(request, servletResponse);
-
 	}
+
 
 	static class MyServletRequestWrapper extends HttpServletRequestWrapper {
 
