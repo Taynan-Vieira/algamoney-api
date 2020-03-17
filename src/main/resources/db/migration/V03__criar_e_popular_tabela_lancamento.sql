@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS PUBLIC.lancamento
 
 INSERT INTO lancamento (descricao, data_vencimento, data_pagamento, valor, observacao, tipo, codigo_categoria,
                         codigo_pessoa)
-values ('Salário mensal', '2020-06-10', null, 6500.00, 'Distribuição de lucros', 'RECEITA', 1, 1),
+values ('Salário mensal', '2020-06-10', null, 500.00, 'Distribuição de lucros', 'RECEITA', 1, 1),
        ('Bahamas', '2020-02-10', '2020-02-10', 100.32, null, 'DESPESA', 2, 2),
        ('Top Club', '2020-06-10', null, 120, null, 'RECEITA', 3, 3),
        ('CEMIG', '2020-02-10', '2020-02-10', 110.44, 'Geração', 'RECEITA', 3, 4),
